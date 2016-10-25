@@ -1,0 +1,31 @@
+FROM ubuntu:14.04
+
+ENV QT_X11_NO_MITSHM=1
+
+RUN apt-get update && apt-get install -y wget
+RUN apt-get install -y libqtcore4 libqtgui4 libqtwebkit4
+RUN apt-get install -y --no-install-recommends libavahi-compat-libdnssd1 libcgal10 liblapack3 libqt4-network libqt4-opengl libqt4-script libqt4-xml
+RUN apt-get install -y --no-install-recommends libxerces-c3.1 libnotify-bin x11-xserver-utils libglu1-mesa libglu1
+RUN apt-get install -y --no-install-recommends libboost-date-time1.54.0 libboost-filesystem1.54.0 libblas3gf libkml0 libsuperlu3 libsuperlu3-dev
+RUN rm -rf /var/lib/apt/lists/*
+
+# Replace 1000 with your user / group id
+RUN export uid=XXUIDXX gid=XXGIDXX && \
+    mkdir -p /home/meshmixer && \
+    mkdir -p /home/meshmixer/Documents/ && \
+    echo "meshmixer:x:${uid}:${gid}:meshmixer,,,:/home/meshmixer:/bin/bash" >> /etc/passwd && \
+    echo "meshmixer:x:${uid}:" >> /etc/group && \
+    echo "meshmixer ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/meshmixer && \
+    echo "meshmixer ALL = NOPASSWD : /usr/bin/apt-get" >> /etc/sudoers.d/meshmixer && \
+    chmod 0440 /etc/sudoers.d/meshmixer && \
+    chown ${uid}:${gid} -R /home/meshmixer
+
+ENV HOME /home/meshmixer
+RUN cd $HOME && wget --quiet https://s3.amazonaws.com/autodesk-meshmixer/meshmixer/amd64/meshmixer_2.9_amd64.deb
+
+RUN echo "/var/lib/dpkg/info/spamassassin.postinst" > "/etc/apt/sources.list.d/meshmixer.list"
+USER meshmixer
+WORKDIR $HOME
+RUN sudo dpkg -i meshmixer_2.9_amd64.deb
+
+CMD xhost + && /usr/bin/meshmixer
