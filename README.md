@@ -1,12 +1,13 @@
 # meshdoxer
-Docker Container for Meshmixer
-Meshmixer does not work with current ubuntu distributions.
-mesdoxer will install docker or use an existing docker installation and create a
-container with a minimal ubuntu 14.04 installation which will be used to run
-Meshmixer
 
-use ./meshdoxer.sh install to setup the Container
-use ./meshdoxer.sh to start Meshmixer
+A Docker Container for Meshmixer.
 
-since Meshmixer is running isolated in its container meshdoxer will mount the
-'exchange' folder in which can be used to exchange files with the host system.
+Meshmixer does not work with current ubuntu distributions. _meshdoxer_ will install Docker or use an existing Docker installation and create a Container with a minimal Ubuntu 14.04 installation which will be used to run Meshmixer
+
+Please execute `meshdoxer` only in its home folder.
+
+Use `./meshdoxer.sh` install to setup the Container
+
+Use `./meshdoxer.sh` to start Meshmixer
+
+Since Meshmixer is running isolated in its Container _meshdoxer_ will mount the `exchange` folder which can be used to exchange files with the host system.
