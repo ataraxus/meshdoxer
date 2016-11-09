@@ -6,7 +6,7 @@ Meshmixer does not work with current ubuntu distributions. _meshdoxer_ will inst
 
 Please execute `meshdoxer` only in its home folder.
 
-Use `./meshdoxer.sh` install to setup the Container
+Use `./meshdoxer.sh install` to install and setup the Container
 
 Use `./meshdoxer.sh` to start Meshmixer
 
