@@ -1,20 +1,19 @@
 #!/bin/bash
 
 function install() {
+	echo -e "Docker is not installed...\nWould you like to install? (Y/n)"
+	read DOCKER_INSTALL
+	case ${DOCKER_INSTALL} in
+		[nN])
+			echo "Aborting installation"
+			exit 0;
+		;;
+	esac
+	echo "Installing docker..."
+	sudo apt-get install -y docker.io
+}
 
-  type docker >/dev/null 2>&1 || {
-		echo -e "Docker is not installed...\nWould you like to install? (Y/n)"
-		read DOCKER_INSTALL
-		case ${DOCKER_INSTALL} in
-			[nN])
-				echo "Aborting installation"
-				exit 0;
-			;;
-		esac
-		echo "Installing docker..."
-	  sudo apt-get install -y docker.io
-	}
-
+function init_container(){
   USER_ID=$(id -u)
   GROUP_ID=$(id -g)
   echo "Creating Dockerfile with current users uid and guid"
@@ -25,6 +24,12 @@ function install() {
 }
 
 function run() {
+  type docker >/dev/null 2>&1 || {
+  	install
+  }
+	if [ ! -f ./Dockerfile ]; then 
+		init_container
+	fi
   sudo docker run -ti --rm --name meshdoxer \
        -e DISPLAY=$DISPLAY \
        -v /tmp/.X11-unix:/tmp/.X11-unix \
